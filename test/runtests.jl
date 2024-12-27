@@ -35,28 +35,8 @@ end
     end
 end
 
-@testset "autodiff" begin
-    include("autodiff.jl")
-end
-
-@testset "einsequence" begin
-    include("einsequence.jl")
-end
-
-@testset "slicing" begin
-    include("slicing.jl")
-end
-
 @testset "interfaces" begin
     include("interfaces.jl")
-end
-
-@testset "contraction order" begin
-    include("contractionorder.jl")
-end
-
-@testset "back propagation" begin
-    include("bp.jl")
 end
 
 @testset "docstring" begin

@@ -85,7 +85,6 @@ struct DynamicEinCode{LT} <: EinCode
 end
 # to avoid ambiguity error, support tuple inputs
 function DynamicEinCode(ixs, iy)
-    @debug "generating dynamic eincode ..."
     if isempty(ixs)
         error("number of input tensors must be greater than 0")
     end

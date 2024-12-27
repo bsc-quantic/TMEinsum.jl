@@ -1,7 +1,7 @@
 module AMDGPUExt
 
 import OMEinsum: asarray, get_output_array, einsum, loop_einsum!, _batched_gemm!, asscalar, @flatten_addmul!
-using OMEinsum: EinArray, Diag, Repeat, Duplicate, DefaultRule, EinCode, DynamicEinCode, StaticEinCode, NestedEinsum, SimpleBinaryRule, match_rule, loop_einsum, getiy, getixs, _unique, einarray, align_eltypes, siblings, isleaf, tensorindex, _safe_set, rootcode
+using OMEinsum: EinArray, Diag, Repeat, Duplicate, DefaultRule, EinCode, DynamicEinCode, SimpleBinaryRule, match_rule, loop_einsum, getiy, getixs, _unique, einarray, align_eltypes, siblings, isleaf, tensorindex, _safe_set, rootcode
 import OMEinsum
 using LinearAlgebra
 import LinearAlgebra: BlasFloat
@@ -132,7 +132,5 @@ function einsum(neinsum::NestedEinsum, @nospecialize(xs::NTuple{N,ROCArrayTypes}
     end
     return res
 end
-
-@info("OMEinsum loaded the AMDGPU module successfully")
 
 end

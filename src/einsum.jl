@@ -45,7 +45,6 @@ function einsum!(code::EinCode, @nospecialize(xs::Tuple), @nospecialize(y), sx, 
 end
 # inplace einsum, the fallback
 function einsum!(ixs, iy, @nospecialize(xs::Tuple), @nospecialize(y), sx, sy, size_dict::Dict)
-    @debug "fallback to loop_einsum" ixs => iy size.(xs)
     loop_einsum!(ixs, iy, (xs...,), y, sx, sy, size_dict)
 end
 
@@ -82,7 +81,6 @@ function unary_pipeline(ix::Vector{LT}, iy::Vector{LT}) where {LT}
 end
 
 function einsum!(ixs, iy, @nospecialize(xs::NTuple{1,Any}), @nospecialize(y), sx, sy, size_dict::Dict{LT}) where {LT}
-    @debug "compiling unary" ixs[1] => iy size(xs[1])
     pipeline = unary_pipeline(collect(LT, ixs[1]), collect(LT, iy))
     lasttensor = xs[1]
     for (k, op) in enumerate(pipeline)
@@ -104,7 +102,6 @@ end
 function einsum!(ixs, iy, @nospecialize(xs::NTuple{2,Any}), @nospecialize(y), sx, sy, size_dict::Dict{LT}) where {LT}
     iyv = _collect(LT, iy)
     ix1v, ix2v = _collect.(Ref(LT), ixs)
-    @debug "compiling binary" ixs => iyv size.(xs)
     x1, x2 = xs
     c1, c2, cy, s1, s2, s3, i1, i2, iyb = analyze_binary(ix1v, ix2v, iyv, size_dict)
     rule = SimpleBinaryRule{(i1...,),(i2...,),(iyb...,)}()
@@ -112,7 +109,6 @@ function einsum!(ixs, iy, @nospecialize(xs::NTuple{2,Any}), @nospecialize(y), sx
     xs2 = simplifyto(ix2v, c2, x2, size_dict)
     x1_ = safe_reshape(xs1, s1)
     x2_ = safe_reshape(xs2, s2)
-    @debug rule size.((x1_, x2_))
     if cy != iyv
         y_ = similar(y, (s3...,))
         y_ = reshape(binary_einsum!(rule, x1_, x2_, y_, true, false), [size_dict[x] for x in cy]...)
